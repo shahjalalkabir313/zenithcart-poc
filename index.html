@@ -48,6 +48,95 @@
             overflow-x: hidden;
         }
 
+        /* ============ ANIMATION SYSTEM ============ */
+        
+        /* Base animation states - elements start hidden */
+        .animate-fade-in,
+        .animate-slide-up,
+        .animate-slide-left,
+        .animate-slide-right,
+        .animate-scale-in {
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                        transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: opacity, transform;
+        }
+
+        .animate-slide-up {
+            transform: translateY(40px);
+        }
+
+        .animate-slide-left {
+            transform: translateX(40px);
+        }
+
+        .animate-slide-right {
+            transform: translateX(-40px);
+        }
+
+        .animate-scale-in {
+            transform: scale(0.95);
+        }
+
+        /* Visible states - triggered by IntersectionObserver */
+        .animate-fade-in.visible,
+        .animate-slide-up.visible,
+        .animate-slide-left.visible,
+        .animate-slide-right.visible,
+        .animate-scale-in.visible {
+            opacity: 1;
+            transform: translateY(0) translateX(0) scale(1);
+        }
+
+        /* Staggered animation delays for grid items */
+        .stagger-1 { transition-delay: 0.1s; }
+        .stagger-2 { transition-delay: 0.2s; }
+        .stagger-3 { transition-delay: 0.3s; }
+        .stagger-4 { transition-delay: 0.4s; }
+        .stagger-5 { transition-delay: 0.5s; }
+        .stagger-6 { transition-delay: 0.6s; }
+
+        /* Hero-specific entrance animations */
+        .hero-animate {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: heroEntrance 1s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+        }
+
+        .hero-animate-delay-1 { animation-delay: 0.2s; }
+        .hero-animate-delay-2 { animation-delay: 0.4s; }
+        .hero-animate-delay-3 { animation-delay: 0.6s; }
+        .hero-animate-delay-4 { animation-delay: 0.8s; }
+
+        @keyframes heroEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Floating animation for hero visual */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .float-animation {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* Glow pulse animation */
+        @keyframes glowPulse {
+            0%, 100% { 
+                box-shadow: 0 0 20px rgba(59, 130, 246, 0.2),
+                            0 0 40px rgba(59, 130, 246, 0.1);
+            }
+            50% { 
+                box-shadow: 0 0 30px rgba(59, 130, 246, 0.3),
+                            0 0 60px rgba(59, 130, 246, 0.15);
+            }
+        }
+
         /* ============ PAGE STRUCTURE ============ */
         .page {
             width: 100%;
@@ -105,6 +194,12 @@
                 linear-gradient(90deg, rgba(59, 130, 246, 0.03) 1px, transparent 1px);
             background-size: 60px 60px;
             pointer-events: none;
+            animation: gridShift 20s linear infinite;
+        }
+
+        @keyframes gridShift {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(60px, 60px); }
         }
 
         .hero-wrapper {
@@ -141,6 +236,13 @@
             text-transform: uppercase;
             letter-spacing: 1.5px;
             margin-bottom: 40px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-badge:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.4);
+            transform: translateY(-2px);
         }
 
         .hero-badge-dot {
@@ -172,6 +274,13 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
+            background-size: 200% 200%;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         .hero-subtitle {
@@ -192,6 +301,11 @@
             display: flex;
             flex-direction: column;
             gap: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-meta-item:hover {
+            transform: translateY(-3px);
         }
 
         .hero-meta-label {
@@ -224,6 +338,15 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3),
                         inset 0 0 0 1px rgba(255, 255, 255, 0.02);
+            transition: all 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .static-logo-wrapper:hover {
+            transform: scale(1.02);
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4),
+                        0 0 40px rgba(59, 130, 246, 0.1),
+                        inset 0 0 0 1px rgba(255, 255, 255, 0.05);
+            border-color: rgba(59, 130, 246, 0.2);
         }
 
         .static-logo-wrapper img {
@@ -253,6 +376,11 @@
             height: 2px;
             background: var(--gradient-1);
             border-radius: 1px;
+            transition: width 0.4s ease;
+        }
+
+        .section-label:hover::before {
+            width: 50px;
         }
 
         .section-title {
@@ -285,6 +413,15 @@
             padding: 40px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .problem-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(239, 68, 68, 0.3);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3),
+                        0 0 30px rgba(239, 68, 68, 0.05);
         }
 
         .problem-card::before {
@@ -296,6 +433,11 @@
             height: 3px;
             background: linear-gradient(90deg, var(--accent-red), var(--accent-orange));
             opacity: 0.8;
+            transition: height 0.3s ease;
+        }
+
+        .problem-card:hover::before {
+            height: 4px;
         }
 
         .problem-card-icon {
@@ -309,6 +451,12 @@
             margin-bottom: 20px;
             background: rgba(239, 68, 68, 0.1);
             border: 1px solid rgba(239, 68, 68, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .problem-card:hover .problem-card-icon {
+            transform: scale(1.1) rotate(5deg);
+            background: rgba(239, 68, 68, 0.15);
         }
 
         .problem-card h3 {
@@ -338,11 +486,25 @@
             border-radius: 16px;
             padding: 30px 24px;
             text-align: center;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .impact-card:hover {
+            background: var(--bg-card-hover);
+            border-color: rgba(239, 68, 68, 0.2);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
         .impact-card-icon {
             font-size: 28px;
             margin-bottom: 16px;
+            display: inline-block;
+            transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .impact-card:hover .impact-card-icon {
+            transform: scale(1.2);
         }
 
         .impact-card h4 {
@@ -374,6 +536,12 @@
             margin-bottom: 30px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .layer-card:hover {
+            border-color: var(--border-light);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
         }
 
         .layer-card.layer-1::before {
@@ -449,6 +617,14 @@
             font-size: 13px;
             font-weight: 600;
             color: var(--accent-blue-light);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .event-tag:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-2px);
         }
 
         .event-tag-dot {
@@ -456,6 +632,11 @@
             height: 6px;
             border-radius: 50%;
             background: var(--accent-blue);
+            transition: transform 0.3s ease;
+        }
+
+        .event-tag:hover .event-tag-dot {
+            transform: scale(1.5);
         }
 
         .warning-box {
@@ -469,6 +650,12 @@
             color: var(--accent-orange);
             font-weight: 500;
             line-height: 1.6;
+            transition: all 0.3s ease;
+        }
+
+        .warning-box:hover {
+            background: rgba(245, 158, 11, 0.08);
+            transform: translateX(5px);
         }
 
         /* Data Flow Steps */
@@ -486,6 +673,13 @@
             background: rgba(255, 255, 255, 0.02);
             border: 1px solid var(--border-color);
             border-radius: 12px;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .flow-step:hover {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--border-light);
+            transform: translateX(10px);
         }
 
         .flow-step-num {
@@ -500,6 +694,11 @@
             font-size: 13px;
             font-weight: 700;
             color: white;
+            transition: transform 0.3s ease;
+        }
+
+        .flow-step:hover .flow-step-num {
+            transform: scale(1.1);
         }
 
         .flow-step p {
@@ -525,6 +724,14 @@
             background: rgba(16, 185, 129, 0.05);
             border: 1px solid rgba(16, 185, 129, 0.12);
             border-radius: 14px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .benefit-pill:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.25);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(16, 185, 129, 0.1);
         }
 
         .benefit-pill h4 {
@@ -548,6 +755,35 @@
             border-radius: 20px;
             padding: 60px 40px;
             min-height: 520px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .architecture-diagram::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-2);
+        }
+
+        .architecture-diagram::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(ellipse at 50% 0%, rgba(59, 130, 246, 0.04) 0%, transparent 60%);
+            pointer-events: none;
+        }
+
+        .architecture-diagram:hover {
+            border-color: var(--border-light);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
         }
 
         .diagram-node {
@@ -559,6 +795,14 @@
             width: 140px;
             position: relative;
             z-index: 2;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .diagram-node:hover {
+            transform: translateY(-8px) scale(1.05);
+            border-color: var(--accent-blue);
+            box-shadow: 0 15px 35px rgba(59, 130, 246, 0.2),
+                        0 0 20px rgba(59, 130, 246, 0.1);
         }
 
         .diagram-node h5 {
@@ -571,6 +815,178 @@
         .diagram-node p {
             font-size: 11px;
             color: var(--text-muted);
+        }
+
+        .diagram-title {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 60px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        /* Desktop diagram visible by default, responsive hidden */
+        .diagram-desktop { display: block; }
+        .diagram-responsive { display: none; }
+
+        /* ============ RESPONSIVE DIAGRAM CSS (Premium Tree) ============ */
+        .dia-flow {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dia-node {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 22px 28px;
+            text-align: center;
+            min-width: 160px;
+            max-width: 200px;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            backdrop-filter: blur(6px);
+        }
+
+        .dia-node::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 17px;
+            padding: 1px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        .dia-node:hover {
+            transform: translateY(-6px) scale(1.03);
+        }
+
+        .dia-node--cyan { border-color: rgba(6, 182, 212, 0.25); background: linear-gradient(180deg, rgba(6, 182, 212, 0.06), var(--bg-tertiary)); }
+        .dia-node--blue { border-color: rgba(37, 99, 235, 0.3); background: linear-gradient(180deg, rgba(37, 99, 235, 0.06), var(--bg-tertiary)); }
+        .dia-node--purple { border-color: rgba(139, 92, 246, 0.3); background: linear-gradient(180deg, rgba(139, 92, 246, 0.06), var(--bg-tertiary)); }
+        .dia-node--neutral { border-color: rgba(161, 161, 170, 0.2); background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), var(--bg-tertiary)); }
+        .dia-node--fb { border-color: rgba(24, 119, 242, 0.25); background: linear-gradient(180deg, rgba(24, 119, 242, 0.06), var(--bg-tertiary)); }
+
+        .dia-node:hover.dia-node--cyan { border-color: var(--accent-cyan); box-shadow: 0 12px 30px rgba(6, 182, 212, 0.15), 0 0 15px rgba(6, 182, 212, 0.05); }
+        .dia-node:hover.dia-node--blue { border-color: var(--accent-blue); box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15), 0 0 15px rgba(37, 99, 235, 0.05); }
+        .dia-node:hover.dia-node--purple { border-color: var(--accent-purple); box-shadow: 0 12px 30px rgba(139, 92, 246, 0.15), 0 0 15px rgba(139, 92, 246, 0.05); }
+        .dia-node:hover.dia-node--neutral { border-color: var(--text-muted); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25); }
+        .dia-node:hover.dia-node--fb { border-color: #1877F2; box-shadow: 0 12px 30px rgba(24, 119, 242, 0.15), 0 0 15px rgba(24, 119, 242, 0.05); }
+
+        .dia-node-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            transition: transform 0.3s ease;
+        }
+
+        .dia-node:hover .dia-node-icon { transform: scale(1.1); }
+
+        .dia-node--cyan .dia-node-icon { background: rgba(6, 182, 212, 0.08); border-color: rgba(6, 182, 212, 0.12); }
+        .dia-node--blue .dia-node-icon { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.12); }
+        .dia-node--purple .dia-node-icon { background: rgba(139, 92, 246, 0.08); border-color: rgba(139, 92, 246, 0.12); }
+        .dia-node--fb .dia-node-icon { background: rgba(24, 119, 242, 0.08); border-color: rgba(24, 119, 242, 0.12); }
+
+        .dia-node-label {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 3px;
+            letter-spacing: -0.2px;
+        }
+
+        .dia-node-sub {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 10px;
+            font-weight: 600;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Single-line connector */
+        .dia-connector {
+            display: flex;
+            justify-content: center;
+            padding: 2px 0;
+        }
+
+        .dia-connector-line {
+            width: 2px;
+            height: 36px;
+            border-radius: 1px;
+            position: relative;
+            background: var(--border-light);
+        }
+
+        .dia-connector-line::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 50%;
+            transform: translateX(-50%);
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 6px solid var(--border-light);
+        }
+
+        /* Center row for single nodes */
+        .dia-row {
+            display: flex;
+            justify-content: center;
+        }
+
+        /* ---- SVG Fork Section ---- */
+        .dia-fork-section {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .dia-fork-svg-wrap {
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .dia-fork-svg-wrap svg {
+            width: 100%;
+            height: auto;
+            display: block;
+            overflow: visible;
+        }
+
+        /* Node pair row */
+        .dia-nodes-row {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .dia-nodes-row .dia-node {
+            flex: 1;
+            min-width: 0;
+            max-width: none;
         }
 
         /* ============ SCREENSHOT EVIDENCE ============ */
@@ -586,6 +1002,12 @@
             overflow: hidden;
             margin-top: 40px;
             margin-bottom: 60px;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .evidence-card:hover {
+            border-color: var(--border-light);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
         }
 
         .evidence-card:last-child {
@@ -600,14 +1022,23 @@
             justify-content: center;
             position: relative;
             border-bottom: 1px solid var(--border-color);
-            padding: 0;
+            padding: 32px 36px;
+            overflow: hidden;
         }
 
         .evidence-mockup img {
             width: 100%;
             height: auto;
             display: block;
-            border-bottom: 1px solid var(--border-color);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+            transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .evidence-card:hover .evidence-mockup img {
+            transform: scale(1.02);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
         }
 
         /* Evidence Details */
@@ -654,6 +1085,13 @@
             background: rgba(16, 185, 129, 0.04);
             border: 1px solid rgba(16, 185, 129, 0.08);
             border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .proves-item:hover {
+            background: rgba(16, 185, 129, 0.08);
+            border-color: rgba(16, 185, 129, 0.15);
+            transform: translateX(5px);
         }
 
         .proves-check {
@@ -661,6 +1099,11 @@
             font-size: 16px;
             font-weight: 700;
             min-width: 20px;
+            transition: transform 0.3s ease;
+        }
+
+        .proves-item:hover .proves-check {
+            transform: scale(1.2);
         }
 
         .proves-item p {
@@ -707,6 +1150,7 @@
             font-size: 14px;
             border-bottom: 1px solid var(--border-color);
             vertical-align: top;
+            transition: all 0.3s ease;
         }
 
         .comparison-table td:first-child {
@@ -726,10 +1170,19 @@
 
         .comparison-table tbody tr {
             background: var(--bg-card);
+            transition: all 0.3s ease;
         }
 
         .comparison-table tbody tr:nth-child(even) {
             background: var(--bg-secondary);
+        }
+
+        .comparison-table tbody tr:hover {
+            background: var(--bg-card-hover);
+        }
+
+        .comparison-table tbody tr:hover td {
+            transform: translateX(5px);
         }
 
         .table-icon {
@@ -745,6 +1198,12 @@
             margin-top: 60px;
             position: relative;
             overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .callout-box:hover {
+            border-color: rgba(59, 130, 246, 0.3);
+            box-shadow: 0 20px 50px rgba(59, 130, 246, 0.1);
         }
 
         .callout-box::before {
@@ -788,6 +1247,12 @@
             border: 1px solid rgba(239, 68, 68, 0.1);
             border-left: 4px solid var(--accent-red);
             border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .watson-highlight:hover {
+            background: rgba(239, 68, 68, 0.06);
+            transform: translateX(5px);
         }
 
         .watson-highlight p {
@@ -813,6 +1278,13 @@
             border-radius: 14px;
             padding: 28px 24px;
             text-align: center;
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .watson-stat:hover {
+            transform: translateY(-8px);
+            border-color: rgba(239, 68, 68, 0.3);
+            box-shadow: 0 20px 40px rgba(239, 68, 68, 0.1);
         }
 
         .watson-stat-value {
@@ -821,6 +1293,11 @@
             font-weight: 900;
             color: var(--accent-red);
             margin-bottom: 6px;
+            transition: transform 0.3s ease;
+        }
+
+        .watson-stat:hover .watson-stat-value {
+            transform: scale(1.1);
         }
 
         .watson-stat-label {
@@ -891,6 +1368,14 @@
             font-size: 14px;
             font-weight: 600;
             color: var(--accent-blue-light);
+            transition: all 0.3s ease;
+            cursor: default;
+        }
+
+        .cta-service-tag:hover {
+            background: rgba(59, 130, 246, 0.15);
+            border-color: rgba(59, 130, 246, 0.3);
+            transform: translateY(-3px);
         }
 
         .cta-contact {
@@ -932,6 +1417,34 @@
             font-weight: 500;
             color: var(--text-primary);
             box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+            cursor: pointer;
+            text-decoration: none;
+            font-family: inherit;
+            text-align: center;
+        }
+
+        /* Static display version (email) — no hover/click effects */
+        .cta-link-item--static {
+            cursor: default;
+            pointer-events: none;
+            user-select: text;
+        }
+
+        .cta-link-item--static:hover {
+            transform: none;
+            border-color: var(--border-color);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+        }
+
+        .cta-link-item--static:hover .cta-link-icon {
+            transform: none;
+        }
+
+        .cta-link-item:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
         }
 
         .cta-link-icon {
@@ -939,6 +1452,11 @@
             align-items: center;
             justify-content: center;
             color: var(--accent-blue-light);
+            transition: transform 0.3s ease;
+        }
+
+        .cta-link-item:hover .cta-link-icon {
+            transform: scale(1.2);
         }
 
         /* ============ QUOTE BLOCK ============ */
@@ -949,6 +1467,12 @@
             border-left: 4px solid var(--accent-blue);
             border-radius: 0 16px 16px 0;
             position: relative;
+            transition: all 0.4s ease;
+        }
+
+        .quote-block:hover {
+            background: var(--bg-card-hover);
+            transform: translateX(10px);
         }
 
         .quote-block p {
@@ -969,6 +1493,12 @@
             left: 30px;
             font-family: Georgia, serif;
             line-height: 1;
+            transition: all 0.4s ease;
+        }
+
+        .quote-block:hover .quote-mark {
+            opacity: 0.5;
+            transform: scale(1.1);
         }
 
         /* ============ PRINT / PDF ============ */
@@ -976,11 +1506,411 @@
             body { background: var(--bg-primary); }
             .section { page-break-inside: avoid; }
             .evidence-card { page-break-inside: avoid; }
+            
+            /* Disable animations for print */
+            .animate-fade-in,
+            .animate-slide-up,
+            .animate-slide-left,
+            .animate-slide-right,
+            .animate-scale-in {
+                opacity: 1 !important;
+                transform: none !important;
+            }
         }
 
         @page {
             size: A3 portrait;
             margin: 0;
+        }
+
+        /* ============ RESPONSIVE ADJUSTMENTS ============ */
+
+        /* --- Large Desktop / PC (1440px+) --- */
+        @media (min-width: 1921px) {
+            .section { max-width: 1600px; }
+            .hero h1 { font-size: 80px; }
+            .section-title { font-size: 56px; }
+            .hero-subtitle { font-size: 22px; }
+        }
+
+        /* --- Standard Desktop / PC (1201px - 1920px) --- */
+        @media (min-width: 1201px) and (max-width: 1920px) {
+            .hero h1 { font-size: clamp(56px, 4vw, 68px); }
+            .section-title { font-size: clamp(40px, 3vw, 48px); }
+        }
+
+        /* --- Small Desktop / Laptop (1025px - 1200px) --- */
+        @media (max-width: 1200px) {
+            .section { padding: 70px 40px; }
+            .hero { padding: 80px 4%; }
+            .hero-wrapper { gap: 40px; }
+            .hero h1 { font-size: 56px; }
+            .hero h1 span:last-child { font-size: 40px !important; }
+            .hero-subtitle { font-size: 18px; }
+            .section-title { font-size: 40px; }
+            .section-description { font-size: 17px; }
+            .hero-meta { gap: 30px; flex-wrap: wrap; }
+            .hero-visual { flex: 0 0 380px; }
+            .impact-grid { grid-template-columns: repeat(3, 1fr); }
+            .watson-stats { grid-template-columns: repeat(2, 1fr); }
+            .architecture-diagram { padding: 50px 30px; }
+            .evidence-section { padding: 70px 40px; }
+            .layer-card { padding: 40px; }
+            .callout-box { padding: 40px; }
+            .cta-section { padding: 80px 40px 100px 40px; }
+            .cta-section h2 { font-size: 48px; }
+        }
+
+        /* --- Tablet (769px - 1024px) --- */
+        @media (max-width: 1024px) {
+            .diagram-desktop { display: none; }
+            .diagram-responsive { display: block; }
+            .diagram-title { margin-bottom: 30px; }
+            .architecture-diagram { min-height: auto; padding: 40px 30px; }
+            .dia-node { min-width: 120px; max-width: 170px; padding: 18px 20px; }
+            .dia-connector-line { height: 30px; }
+            .dia-node-icon { width: 44px; height: 44px; }
+            .dia-fork-svg-wrap { max-width: 360px; }
+            .dia-nodes-row { max-width: 360px; gap: 12px; }
+            .section { padding: 60px 30px; }
+            .hero { padding: 70px 3%; min-height: auto; }
+            .hero-wrapper {
+                flex-direction: column;
+                text-align: center;
+                gap: 50px;
+            }
+            .hero-content {
+                align-items: center;
+                text-align: center;
+                max-width: 100%;
+            }
+            .hero h1 {
+                font-size: 52px;
+                letter-spacing: -2px;
+            }
+            .hero h1 span:last-child { font-size: 36px !important; }
+            .hero-subtitle {
+                font-size: 17px;
+                margin: 0 auto 40px;
+            }
+            .hero-meta {
+                justify-content: center;
+                gap: 40px;
+                flex-wrap: wrap;
+            }
+            .hero-visual {
+                flex: none;
+                width: 100%;
+                max-width: 400px;
+            }
+            .static-logo-wrapper { padding: 25px; }
+            .section-title { font-size: 38px; letter-spacing: -1.5px; }
+            .section-description { font-size: 16px; }
+            .problem-grid {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            .problem-card { padding: 30px; }
+            .impact-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .impact-card { padding: 24px 20px; }
+            .impact-card-icon { font-size: 24px; }
+            .benefit-grid {
+                grid-template-columns: 1fr;
+                gap: 16px;
+            }
+            .benefit-pill { padding: 20px; }
+            .architecture-diagram {
+                padding: 40px 20px;
+                min-height: auto;
+            }
+            .layer-card {
+                padding: 35px 25px;
+                margin-bottom: 20px;
+            }
+            .layer-card h3 { font-size: 22px; }
+            .flow-step { padding: 14px 18px; gap: 12px; }
+            .event-tags { gap: 8px; }
+            .event-tag {
+                padding: 8px 14px;
+                font-size: 12px;
+            }
+            .proves-list {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .proves-item { padding: 10px 14px; }
+            .evidence-mockup { padding: 24px 28px; }
+            .evidence-section { padding: 60px 30px; }
+            .evidence-card {
+                margin-top: 30px;
+                margin-bottom: 40px;
+            }
+            .evidence-details { padding: 30px 25px; }
+            .evidence-details h3 { font-size: 20px; }
+            .watson-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .watson-stat { padding: 24px 20px; }
+            .watson-stat-value { font-size: 28px; }
+            .comparison-table {
+                font-size: 13px;
+                margin-top: 40px;
+            }
+            .comparison-table th { padding: 14px 16px; font-size: 11px; }
+            .comparison-table td { padding: 12px 16px; font-size: 13px; }
+            .callout-box {
+                padding: 35px 25px;
+                margin-top: 40px;
+            }
+            .callout-box h3 { font-size: 22px; }
+            .quote-block { padding: 40px 30px; margin: 40px 0; }
+            .quote-block p { font-size: 20px; padding-left: 20px; }
+            .quote-block .quote-mark { font-size: 52px; left: 20px; }
+            .cta-section {
+                padding: 70px 30px 90px 30px;
+            }
+            .cta-section h2 { font-size: 42px; letter-spacing: -2px; }
+            .cta-services { gap: 10px; margin-bottom: 50px; }
+            .cta-service-tag {
+                padding: 8px 18px;
+                font-size: 13px;
+            }
+            .cta-contact { gap: 15px; }
+            .cta-name { font-size: 18px; }
+            .cta-links {
+                gap: 12px;
+                flex-direction: column;
+                width: 100%;
+                max-width: 400px;
+            }
+            .cta-link-item {
+                width: 100%;
+                justify-content: center;
+                padding: 14px 20px;
+                font-size: 14px;
+            }
+        }
+
+        /* --- Mobile (481px - 768px) --- */
+        @media (max-width: 768px) {
+            .architecture-diagram { padding: 28px 14px; }
+            .diagram-title { margin-bottom: 18px; font-size: 10px; }
+            .dia-node { min-width: 100px; max-width: 145px; padding: 14px 12px; border-radius: 14px; }
+            .dia-node-icon { width: 36px; height: 36px; border-radius: 10px; }
+            .dia-node-icon svg { width: 20px; height: 20px; }
+            .dia-node-label { font-size: 12px; }
+            .dia-node-sub { font-size: 8px; }
+            .dia-connector-line { height: 22px; }
+            .dia-fork-svg-wrap { max-width: 320px; }
+            .dia-nodes-row { max-width: 320px; gap: 10px; }
+            .section { padding: 50px 20px; }
+            .hero { padding: 60px 5%; }
+            .hero h1 {
+                font-size: 42px;
+                letter-spacing: -1.5px;
+            }
+            .hero h1 span:last-child { font-size: 28px !important; letter-spacing: -1px; }
+            .hero-subtitle { font-size: 16px; }
+            .hero-meta { gap: 25px; }
+            .hero-meta-label { font-size: 10px; }
+            .hero-meta-value { font-size: 14px; }
+            .section-label { font-size: 11px; letter-spacing: 2.5px; }
+            .section-title { font-size: 32px; letter-spacing: -1.2px; }
+            .section-description { font-size: 15px; }
+            .problem-grid { margin-top: 40px; }
+            .problem-card { padding: 25px 20px; }
+            .problem-card-icon { width: 44px; height: 44px; font-size: 20px; margin-bottom: 16px; }
+            .problem-card h3 { font-size: 17px; }
+            .problem-card p { font-size: 14px; }
+            .impact-grid { margin-top: 40px; }
+            .impact-card h4 { font-size: 12px; }
+            .impact-card p { font-size: 12px; }
+            .architecture-flow { margin-top: 40px; }
+            .architecture-diagram {
+                margin-top: 40px;
+                padding: 30px 15px;
+            }
+            .layer-card { padding: 30px 20px; }
+            .layer-number { font-size: 11px; letter-spacing: 2px; }
+            .layer-card h3 { font-size: 20px; margin-bottom: 14px; }
+            .layer-card > p { font-size: 15px; }
+            .warning-box { padding: 16px 20px; font-size: 13px; margin-top: 20px; }
+            .callout-box { padding: 30px 20px; margin-top: 30px; }
+            .callout-box h3 { font-size: 20px; }
+            .callout-box p { font-size: 15px; }
+            .evidence-mockup { padding: 20px 20px; }
+            .evidence-mockup img { border-radius: 6px; }
+            .evidence-section { padding: 50px 20px; }
+            .evidence-card { margin-top: 25px; margin-bottom: 30px; }
+            .evidence-details { padding: 25px 20px; }
+            .evidence-number { font-size: 11px; }
+            .evidence-details h3 { font-size: 18px; margin-bottom: 10px; }
+            .evidence-description { font-size: 14px; margin-bottom: 20px; }
+            .watson-stats { gap: 12px; }
+            .watson-stat { padding: 20px 16px; }
+            .watson-stat-value { font-size: 24px; }
+            .watson-stat-label { font-size: 12px; }
+            .comparison-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                margin-top: 30px;
+                white-space: nowrap;
+            }
+            .comparison-table thead,
+            .comparison-table tbody,
+            .comparison-table th,
+            .comparison-table td,
+            .comparison-table tr { display: table-cell; }
+            .comparison-table { white-space: normal; }
+            .cta-section { padding: 60px 20px 80px 20px; }
+            .cta-section h2 { font-size: 36px; letter-spacing: -1.5px; }
+            .cta-service-tag { padding: 7px 14px; font-size: 12px; }
+            .cta-name { font-size: 17px; }
+            .cta-role { font-size: 13px; }
+            .cta-link-item {
+                padding: 13px 18px;
+                font-size: 13px;
+            }
+            .static-logo-wrapper { padding: 20px; }
+            .hero-visual { max-width: 320px; }
+            .quote-block { padding: 30px 25px; margin: 30px 0; }
+            .quote-block p { font-size: 18px; padding-left: 0; }
+            .quote-block .quote-mark { top: 10px; font-size: 44px; }
+            /* Simplify flow steps on mobile */
+            .flow-step-num { min-width: 28px; height: 28px; font-size: 12px; }
+            .flow-step p { font-size: 14px; }
+            .event-tags { margin-top: 20px; }
+            .benefit-pill h4 { font-size: 14px; }
+            .benefit-pill p { font-size: 13px; }
+            .watson-highlight { margin-top: 30px; padding: 25px; }
+            .watson-highlight p { font-size: 14px; }
+        }
+
+        /* --- Small Mobile (up to 480px) --- */
+        @media (max-width: 480px) {
+            .architecture-diagram { padding: 20px 8px; }
+            .diagram-title { margin-bottom: 12px; font-size: 8px; letter-spacing: 1.5px; }
+            .dia-node { min-width: 75px; max-width: 110px; padding: 10px 8px; border-radius: 11px; }
+            .dia-node::before { border-radius: 12px; }
+            .dia-node-icon { width: 30px; height: 30px; margin-bottom: 5px; border-radius: 7px; }
+            .dia-node-icon svg { width: 16px; height: 16px; }
+            .dia-node-label { font-size: 9px; }
+            .dia-node-sub { font-size: 6px; letter-spacing: 0.5px; }
+            .dia-connector-line { height: 16px; }
+            .dia-fork-svg-wrap { max-width: 280px; }
+            .dia-nodes-row { max-width: 280px; gap: 8px; }
+            .section { padding: 40px 15px; }
+            .hero { padding: 50px 5%; }
+            .hero h1 {
+                font-size: 34px;
+                letter-spacing: -1px;
+            }
+            .hero h1 span:last-child { font-size: 22px !important; letter-spacing: -0.5px; }
+            .hero-subtitle { font-size: 15px; margin-bottom: 30px; }
+            .hero-meta {
+                gap: 15px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .hero-meta-item { align-items: center; text-align: center; }
+            .section-title { font-size: 26px; letter-spacing: -1px; }
+            .section-description { font-size: 14px; }
+            .problem-card { padding: 20px 18px; }
+            .problem-card h3 { font-size: 16px; margin-bottom: 10px; }
+            .problem-card p { font-size: 13px; }
+            .impact-grid { grid-template-columns: 1fr; }
+            .impact-card { padding: 20px 18px; }
+            .impact-card h4 { font-size: 11px; }
+            .impact-card p { font-size: 12px; }
+            .layer-card { padding: 25px 18px; }
+            .layer-card h3 { font-size: 17px; margin-bottom: 12px; }
+            .layer-card > p { font-size: 14px; }
+            .event-tag {
+                padding: 7px 12px;
+                font-size: 11px;
+            }
+            .flow-step { padding: 12px 14px; gap: 10px; }
+            .flow-step p { font-size: 13px; }
+            .benefit-pill { padding: 18px; }
+            .benefit-pill h4 { font-size: 13px; }
+            .benefit-pill p { font-size: 12px; }
+            .proves-item { padding: 10px 12px; }
+            .proves-item p { font-size: 12px; }
+            .evidence-mockup { padding: 16px 14px; }
+            .evidence-mockup img { border-radius: 5px; box-shadow: 0 3px 12px rgba(0,0,0,0.2); }
+            .evidence-section { padding: 40px 15px; }
+            .evidence-details { padding: 20px 18px; }
+            .evidence-details h3 { font-size: 16px; }
+            .evidence-description { font-size: 13px; }
+            .watson-stats { grid-template-columns: 1fr; }
+            .watson-stat { padding: 18px 16px; }
+            .watson-stat-value { font-size: 22px; }
+            .watson-stat-label { font-size: 11px; }
+            .comparison-table { font-size: 12px; }
+            .comparison-table th { padding: 10px 12px; font-size: 10px; }
+            .comparison-table td { padding: 10px 12px; font-size: 12px; }
+            .callout-box { padding: 25px 18px; }
+            .callout-box h3 { font-size: 18px; }
+            .callout-box p { font-size: 14px; }
+            .cta-section { padding: 50px 15px 70px 15px; }
+            .cta-section h2 { font-size: 30px; letter-spacing: -1px; }
+            .cta-section .section-description { font-size: 14px; margin-bottom: 35px; }
+            .cta-services { margin-bottom: 35px; gap: 8px; }
+            .cta-service-tag { padding: 6px 12px; font-size: 11px; }
+            .cta-name { font-size: 16px; }
+            .cta-role { font-size: 12px; }
+            .cta-link-item {
+                padding: 12px 16px;
+                font-size: 12px;
+            }
+            .static-logo-wrapper { padding: 15px; }
+            .hero-visual { max-width: 280px; }
+            .hero-badge { padding: 6px 16px; font-size: 11px; margin-bottom: 25px; }
+            .quote-block { padding: 25px 20px; margin: 25px 0; }
+            .quote-block p { font-size: 16px; }
+            .quote-block .quote-mark { font-size: 40px; top: 5px; left: 15px; }
+            .architecture-diagram { padding: 25px 10px; }
+            .warning-box { padding: 14px 16px; font-size: 12px; }
+            .watson-highlight { margin-top: 25px; padding: 20px; }
+            .watson-highlight p { font-size: 13px; }
+        }
+
+        /* --- Landscape Mobile & Tablet Touch Optimizations --- */
+        @media (hover: none) and (pointer: coarse) {
+            .problem-card:hover,
+            .impact-card:hover,
+            .layer-card:hover,
+            .benefit-pill:hover,
+            .watson-stat:hover,
+            .evidence-card:hover,
+            .proves-item:hover,
+            .cta-link-item:hover,
+            .event-tag:hover,
+            .comparison-table tbody tr:hover,
+            .quote-block:hover,
+            .callout-box:hover,
+            .dia-node:hover,
+            .diagram-node:hover,
+            .flow-step:hover,
+            .warning-box:hover,
+            .watson-highlight:hover {
+                transform: none;
+                box-shadow: none;
+                background: none;
+                border-color: initial;
+            }
+            /* Use tap feedback instead */
+            .cta-link-item:active,
+            .event-tag:active,
+            .proves-item:active {
+                transform: scale(0.97);
+                opacity: 0.8;
+            }
         }
     </style>
 </head>
@@ -992,22 +1922,22 @@
         
         <div class="hero-wrapper">
             <div class="hero-content">
-                <div class="hero-badge">
+                <div class="hero-badge hero-animate hero-animate-delay-1">
                     <span class="hero-badge-dot"></span>
                     Proof of Concept — Live Implementation
                 </div>
 
-                <h1>
+                <h1 class="hero-animate hero-animate-delay-2">
                     Future-Proof<br>
                     <span class="gradient-text">Tracking Architecture</span><br>
                     <span style="font-size: 48px; letter-spacing: -1.5px;">Meta CAPI & Server-Side GTM</span>
                 </h1>
 
-                <p class="hero-subtitle">
+                <p class="hero-subtitle hero-animate hero-animate-delay-3">
                     A live proof of concept built to eliminate data loss, defeat iOS 14+ restrictions, and maximize every Ringgit of ad spend — designed for enterprise e-commerce brands operating at scale.
                 </p>
 
-                <div class="hero-meta">
+                <div class="hero-meta hero-animate hero-animate-delay-4">
                     <div class="hero-meta-item">
                         <span class="hero-meta-label">Project</span>
                         <span class="hero-meta-value">ZenithCart POC</span>
@@ -1027,8 +1957,8 @@
                 </div>
             </div>
 
-            <div class="hero-visual">
-                <div class="static-logo-wrapper">
+            <div class="hero-visual hero-animate hero-animate-delay-3">
+                <div class="static-logo-wrapper float-animation">
                     <img src="Tracking Mastery logo.png" alt="Tracking Mastery Logo">
                 </div>
             </div>
@@ -1038,16 +1968,16 @@
 
     <div class="section-wrapper section-dark">
         <section class="section section-dark">
-            <div class="section-label">Project Context</div>
-            <h2 class="section-title">Not a Client Project.<br><span style="color: var(--accent-blue-light);">Something More Deliberate.</span></h2>
-            <p class="section-description" style="margin-bottom: 30px;">
+            <div class="section-label animate-slide-up">Project Context</div>
+            <h2 class="section-title animate-slide-up">Not a Client Project.<br><span style="color: var(--accent-blue-light);">Something More Deliberate.</span></h2>
+            <p class="section-description animate-slide-up" style="margin-bottom: 30px;">
                 ZenithCart is a fully functional demo e-commerce marketplace I architected from scratch for one reason:
             </p>
-            <p class="section-description" style="font-size: 20px; color: var(--text-primary); font-weight: 700; max-width: 800px;">
+            <p class="section-description animate-slide-up" style="font-size: 20px; color: var(--text-primary); font-weight: 700; max-width: 800px;">
                 To prove — with irrefutable visual evidence — that I can build the exact tracking infrastructure that enterprise e-commerce brands desperately need but rarely have.
             </p>
 
-            <div class="quote-block" style="margin-top: 50px; margin-bottom: 0;">
+            <div class="quote-block animate-slide-up" style="margin-top: 50px; margin-bottom: 0;">
                 <span class="quote-mark">"</span>
                 <p style="padding-left: 30px;">Every tag. Every trigger. Every server-side relay. Every deduplicated event. Documented. Verified. Battle-tested.</p>
             </div>
@@ -1056,14 +1986,14 @@
 
     <div class="section-wrapper section-darker">
         <section class="section section-darker">
-            <div class="section-label">The Problem</div>
-            <h2 class="section-title">The Silent Revenue Leak<br>Costing Brands Millions</h2>
-            <p class="section-description">
+            <div class="section-label animate-slide-up">The Problem</div>
+            <h2 class="section-title animate-slide-up">The Silent Revenue Leak<br>Costing Brands Millions</h2>
+            <p class="section-description animate-slide-up">
                 If you are running Meta Ads for an e-commerce brand in 2026 and relying solely on the Meta Pixel, you are making strategic decisions with incomplete data. Full stop.
             </p>
 
             <div class="problem-grid">
-                <div class="problem-card">
+                <div class="problem-card animate-slide-up stagger-1">
                     <div class="problem-card-icon">🍎</div>
                     <h3>iOS 14.5+ App Tracking Transparency</h3>
                     <p>
@@ -1071,7 +2001,7 @@
                     </p>
                 </div>
 
-                <div class="problem-card">
+                <div class="problem-card animate-slide-up stagger-2">
                     <div class="problem-card-icon">🛡️</div>
                     <h3>Browser Ad Blockers & Tracking Prevention</h3>
                     <p>
@@ -1081,34 +2011,34 @@
             </div>
 
             <div class="impact-grid">
-                <div class="impact-card">
+                <div class="impact-card animate-scale-in stagger-1">
                     <div class="impact-card-icon">📉</div>
                     <h4>Underreported Conversions</h4>
                     <p>Meta sees fewer purchases than occurred. Campaigns look like they're failing — even when they're not.</p>
                 </div>
-                <div class="impact-card">
+                <div class="impact-card animate-scale-in stagger-2">
                     <div class="impact-card-icon">🤖</div>
                     <h4>Broken Optimization</h4>
                     <p>Fewer signals mean the algorithm starts showing ads to lower-intent users. Performance degrades.</p>
                 </div>
-                <div class="impact-card">
+                <div class="impact-card animate-scale-in stagger-3">
                     <div class="impact-card-icon">💸</div>
                     <h4>Inflated CPA</h4>
                     <p>Meta can't see the full picture, can't optimize efficiently. You pay more for every customer.</p>
                 </div>
-                <div class="impact-card">
+                <div class="impact-card animate-scale-in stagger-4">
                     <div class="impact-card-icon">📊</div>
                     <h4>Eroded ROAS</h4>
                     <p>Reported ROAS drops. Leadership loses confidence. Budgets get cut. Growth stalls.</p>
                 </div>
-                <div class="impact-card">
+                <div class="impact-card animate-scale-in stagger-5">
                     <div class="impact-card-icon">👥</div>
                     <h4>Poisoned Audiences</h4>
                     <p>30–40% incomplete data means every audience you build is fundamentally compromised.</p>
                 </div>
             </div>
 
-            <div class="quote-block">
+            <div class="quote-block animate-slide-up">
                 <span class="quote-mark">"</span>
                 <p style="padding-left: 30px;">The brands that win in this environment are not the ones spending the most. They are the ones measuring the most accurately.</p>
             </div>
@@ -1117,97 +2047,187 @@
 
     <div class="section-wrapper section-dark">
         <section class="section section-dark">
-            <div class="section-label">The Solution</div>
-            <h2 class="section-title">Dual-Layer Tracking<br><span class="gradient-text">Architecture</span></h2>
-            <p class="section-description">
+            <div class="section-label animate-slide-up">The Solution</div>
+            <h2 class="section-title animate-slide-up">Dual-Layer Tracking<br><span class="gradient-text">Architecture</span></h2>
+            <p class="section-description animate-slide-up">
                 GTM Web + Server-Side Container + Meta Conversion API — the exact infrastructure deployed by top-performing DTC brands and agencies managing seven- and eight-figure ad budgets.
             </p>
 
-            <div class="architecture-diagram">
-                <div style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 60px; text-align: center;">Data Flow Architecture</div>
+            <div class="architecture-diagram animate-scale-in">
+                <div class="diagram-title">Data Flow Architecture</div>
 
-                <div style="position: relative; max-width: 1000px; margin: 0 auto; height: 380px;">
-
-                    <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none;" overflow="visible">
-                        
-                        <line x1="320" y1="200" x2="320" y2="145" stroke="#8b5cf6" stroke-width="2.5" />
-                        <polygon points="315,148 325,148 320,140" fill="#8b5cf6" />
-                        <text x="330" y="175" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" fill="#8b5cf6" font-weight="600" dominant-baseline="middle">Server-Side Tracking</text>
-
-                        <path d="M 400 68 L 880 68 L 880 230" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="6,6" />
-                        <polygon points="875,227 885,227 880,235" fill="#3b82f6" />
-                        
-                        <g transform="translate(560, 40)">
-                            <svg x="0" y="0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                                <rect x="4" y="3" width="16" height="5" rx="1"></rect>
-                                <rect x="4" y="10" width="16" height="5" rx="1"></rect>
-                                <rect x="4" y="17" width="16" height="5" rx="1"></rect>
-                                <line x1="7" y1="5.5" x2="7.01" y2="5.5" stroke-width="2"></line>
-                                <line x1="7" y1="12.5" x2="7.01" y2="12.5" stroke-width="2"></line>
-                                <line x1="7" y1="19.5" x2="7.01" y2="19.5" stroke-width="2"></line>
-                                <line x1="11" y1="5.5" x2="17" y2="5.5"></line>
-                                <line x1="11" y1="12.5" x2="17" y2="12.5"></line>
-                                <line x1="11" y1="19.5" x2="17" y2="19.5"></line>
-                            </svg>
-                            <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#3b82f6" font-weight="600" dominant-baseline="middle">Conversions API</text>
-                        </g>
-
-                        <line x1="150" y1="268" x2="235" y2="268" stroke="#a1a1aa" stroke-width="2.5" />
-                        <polygon points="232,263 232,273 240,268" fill="#a1a1aa" />
-
-                        <line x1="400" y1="268" x2="485" y2="268" stroke="#a1a1aa" stroke-width="2.5" />
-                        <polygon points="482,263 482,273 490,268" fill="#a1a1aa" />
-
-                        <line x1="650" y1="268" x2="795" y2="268" stroke="#a1a1aa" stroke-width="2.5" stroke-dasharray="6,6" />
-                        <polygon points="792,263 792,273 800,268" fill="#a1a1aa" />
-                        <text x="725" y="255" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" fill="#a1a1aa" font-weight="600" text-anchor="middle">Meta Pixel</text>
-
-                    </svg>
-
-                    <div style="position: relative; z-index: 2; height: 100%;">
-                        
-                        <div class="diagram-node" style="position: absolute; top: 0; left: 250px; border-color: rgba(139, 92, 246, 0.4);">
-                            <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.5 19C19.985 19 22 16.985 22 14.5C22 12.136 20.18 10.202 17.85 10.02C17.334 6.613 14.39 4 10.8 4C6.934 4 3.8 7.134 3.8 11C3.8 11.083 3.801 11.165 3.804 11.246C1.637 11.666 0 13.593 0 15.9C0 18.385 2.015 20.4 4.5 20.4H17.5V19Z" /></svg></svg>
+                <!-- DESKTOP DIAGRAM: SVG-based (hidden on mobile/tablet) -->
+                <div class="diagram-desktop">
+                    <div style="position: relative; max-width: 1000px; margin: 0 auto; height: 380px;">
+                        <svg width="100%" height="100%" style="position: absolute; top: 0; left: 0; z-index: 1; pointer-events: none;" overflow="visible">
+                            <line x1="320" y1="200" x2="320" y2="145" stroke="#8b5cf6" stroke-width="2.5" />
+                            <polygon points="315,148 325,148 320,140" fill="#8b5cf6" />
+                            <text x="330" y="175" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" fill="#8b5cf6" font-weight="600" dominant-baseline="middle">Server-Side Tracking</text>
+                            <path d="M 400 68 L 880 68 L 880 230" fill="none" stroke="#3b82f6" stroke-width="2.5" stroke-dasharray="6,6" />
+                            <polygon points="875,227 885,227 880,235" fill="#3b82f6" />
+                            <g transform="translate(560, 40)">
+                                <svg x="0" y="0" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#3b82f6" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                                    <rect x="4" y="3" width="16" height="5" rx="1"></rect>
+                                    <rect x="4" y="10" width="16" height="5" rx="1"></rect>
+                                    <rect x="4" y="17" width="16" height="5" rx="1"></rect>
+                                    <line x1="7" y1="5.5" x2="7.01" y2="5.5" stroke-width="2"></line>
+                                    <line x1="7" y1="12.5" x2="7.01" y2="12.5" stroke-width="2"></line>
+                                    <line x1="7" y1="19.5" x2="7.01" y2="19.5" stroke-width="2"></line>
+                                    <line x1="11" y1="5.5" x2="17" y2="5.5"></line>
+                                    <line x1="11" y1="12.5" x2="17" y2="12.5"></line>
+                                    <line x1="11" y1="19.5" x2="17" y2="19.5"></line>
+                                </svg>
+                                <text x="32" y="17" font-family="'Plus Jakarta Sans', sans-serif" font-size="14" fill="#3b82f6" font-weight="600" dominant-baseline="middle">Conversions API</text>
+                            </g>
+                            <line x1="150" y1="268" x2="235" y2="268" stroke="#a1a1aa" stroke-width="2.5" />
+                            <polygon points="232,263 232,273 240,268" fill="#a1a1aa" />
+                            <line x1="400" y1="268" x2="485" y2="268" stroke="#a1a1aa" stroke-width="2.5" />
+                            <polygon points="482,263 482,273 490,268" fill="#a1a1aa" />
+                            <line x1="650" y1="268" x2="795" y2="268" stroke="#a1a1aa" stroke-width="2.5" stroke-dasharray="6,6" />
+                            <polygon points="792,263 792,273 800,268" fill="#a1a1aa" />
+                            <text x="725" y="255" font-family="'Plus Jakarta Sans', sans-serif" font-size="13" fill="#a1a1aa" font-weight="600" text-anchor="middle">Meta Pixel</text>
+                        </svg>
+                        <div style="position: relative; z-index: 2; height: 100%;">
+                            <div class="diagram-node" style="position: absolute; top: 0; left: 250px; border-color: rgba(139, 92, 246, 0.4);">
+                                <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.5 19C19.985 19 22 16.985 22 14.5C22 12.136 20.18 10.202 17.85 10.02C17.334 6.613 14.39 4 10.8 4C6.934 4 3.8 7.134 3.8 11C3.8 11.083 3.801 11.165 3.804 11.246C1.637 11.666 0 13.593 0 15.9C0 18.385 2.015 20.4 4.5 20.4H17.5V19Z" /></svg></svg>
+                                </div>
+                                <h5>Client Server</h5>
+                                <p>GTM Server</p>
                             </div>
-                            <h5>Client Server</h5>
-                            <p>GTM Server</p>
-                        </div>
-
-                        <div class="diagram-node" style="position: absolute; top: 200px; left: 0;">
-                            <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                            <div class="diagram-node" style="position: absolute; top: 200px; left: 0;">
+                                <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </div>
+                                <h5>Customer</h5>
                             </div>
-                            <h5>Customer</h5>
-                        </div>
-
-                        <div class="diagram-node" style="position: absolute; top: 200px; left: 250px; border-color: rgba(37, 99, 235, 0.4);">
-                            <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></svg>
+                            <div class="diagram-node" style="position: absolute; top: 200px; left: 250px; border-color: rgba(37, 99, 235, 0.4);">
+                                <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="4" y="4" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></svg>
+                                </div>
+                                <h5>Client Website</h5>
+                                <p>GTM Web</p>
                             </div>
-                            <h5>Client Website</h5>
-                            <p>GTM Web</p>
-                        </div>
-
-                        <div class="diagram-node" style="position: absolute; top: 200px; left: 500px; border-color: rgba(6, 182, 212, 0.4);">
-                            <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><path d="M3 8h18"></path><path d="M8 12l-2 2 2 2"></path><path d="M16 12l2 2-2 2"></path><line x1="13" y1="11" x2="11" y2="17"></line></svg>
+                            <div class="diagram-node" style="position: absolute; top: 200px; left: 500px; border-color: rgba(6, 182, 212, 0.4);">
+                                <div class="diagram-node-icon" style="display: flex; justify-content: center; margin-bottom: 12px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><path d="M3 8h18"></path><path d="M8 12l-2 2 2 2"></path><path d="M16 12l2 2-2 2"></path><line x1="13" y1="11" x2="11" y2="17"></line></svg>
+                                </div>
+                                <h5>Web Browser</h5>
+                                <p>Meta Pixel</p>
                             </div>
-                            <h5>Web Browser</h5>
-                            <p>Meta Pixel</p>
+                            <div style="position: absolute; top: 245px; left: 815px; display: flex; align-items: center; justify-content: center;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="150" height="45" viewBox="0 0 500 100">
+                                    <text x="0" y="70" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="80" fill="#1877F2">facebook</text>
+                                </svg>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RESPONSIVE DIAGRAM: SVG Fork Tree (tablet/mobile) -->
+                <div class="diagram-responsive">
+                    <div class="dia-flow">
+
+                        <!-- Customer -->
+                        <div class="dia-row">
+                            <div class="dia-node dia-node--cyan animate-scale-in stagger-1">
+                                <div class="dia-node-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--accent-cyan)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                </div>
+                                <div class="dia-node-label">Customer</div>
+                                <div class="dia-node-sub">User Action</div>
+                            </div>
                         </div>
 
-                        <div style="position: absolute; top: 245px; left: 815px; display: flex; align-items: center; justify-content: center;">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="150" height="45" viewBox="0 0 500 100">
-                                <text x="0" y="70" font-family="'Plus Jakarta Sans', Arial, sans-serif" font-weight="900" font-size="80" fill="#1877F2">facebook</text>
-                            </svg>
+                        <div class="dia-connector"><div class="dia-connector-line"></div></div>
+
+                        <!-- Client Website -->
+                        <div class="dia-row">
+                            <div class="dia-node dia-node--blue animate-scale-in stagger-2">
+                                <div class="dia-node-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="5" y="5" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg></svg>
+                                </div>
+                                <div class="dia-node-label">Client Website</div>
+                                <div class="dia-node-sub">GTM Web</div>
+                            </div>
                         </div>
+
+                        <!-- SVG: Fork lines from center splitting to left & right, with side labels -->
+                        <div class="dia-fork-section">
+                            <div class="dia-fork-svg-wrap">
+                                <svg viewBox="0 0 380 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Stem down from Client Website -->
+                                    <line x1="190" y1="0" x2="190" y2="20" stroke="#3f3f46" stroke-width="2"/>
+                                    <!-- Horizontal bar -->
+                                    <line x1="95" y1="20" x2="285" y2="20" stroke="#3f3f46" stroke-width="2"/>
+                                    <!-- Left branch: solid purple line down -->
+                                    <line x1="95" y1="20" x2="95" y2="62" stroke="#8b5cf6" stroke-width="2"/>
+                                    <polygon points="90,60 100,60 95,68" fill="#8b5cf6"/>
+                                    <!-- Right branch: dashed grey line down -->
+                                    <line x1="285" y1="20" x2="285" y2="62" stroke="#71717a" stroke-width="2" stroke-dasharray="5,5"/>
+                                    <polygon points="280,60 290,60 285,68" fill="#71717a"/>
+                                    <!-- Label: Server-Side (left of left branch) -->
+                                    <text x="82" y="45" font-family="'JetBrains Mono', monospace" font-size="9" fill="#8b5cf6" font-weight="700" text-anchor="end" letter-spacing="0.8">SERVER-SIDE</text>
+                                    <!-- Label: Browser Pixel (right of right branch) -->
+                                    <text x="298" y="45" font-family="'JetBrains Mono', monospace" font-size="9" fill="#71717a" font-weight="700" text-anchor="start" letter-spacing="0.8">BROWSER PIXEL</text>
+                                </svg>
+                            </div>
+
+                            <!-- Two nodes side by side -->
+                            <div class="dia-nodes-row">
+                                <div class="dia-node dia-node--purple animate-scale-in stagger-3">
+                                    <div class="dia-node-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24"><circle cx="12" cy="12" r="12" fill="#2563EB"/><svg x="5" y="5" width="14" height="14" viewBox="0 0 24 24" fill="white"><path d="M17.5 19C19.985 19 22 16.985 22 14.5C22 12.136 20.18 10.202 17.85 10.02C17.334 6.613 14.39 4 10.8 4C6.934 4 3.8 7.134 3.8 11C3.8 11.083 3.801 11.165 3.804 11.246C1.637 11.666 0 13.593 0 15.9C0 18.385 2.015 20.4 4.5 20.4H17.5V19Z"/></svg></svg>
+                                    </div>
+                                    <div class="dia-node-label">GTM Server</div>
+                                    <div class="dia-node-sub">Server Container</div>
+                                </div>
+                                <div class="dia-node dia-node--neutral animate-scale-in stagger-4">
+                                    <div class="dia-node-icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2" ry="2"></rect><path d="M3 8h18"></path><path d="M8 12l-2 2 2 2"></path><path d="M16 12l2 2-2 2"></path><line x1="13" y1="11" x2="11" y2="17"></line></svg>
+                                    </div>
+                                    <div class="dia-node-label">Web Browser</div>
+                                    <div class="dia-node-sub">Meta Pixel</div>
+                                </div>
+                            </div>
+
+                            <!-- SVG: Merge lines from left & right converging to center, with side labels -->
+                            <div class="dia-fork-svg-wrap">
+                                <svg viewBox="0 0 380 70" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <!-- Left branch: dashed blue line down -->
+                                    <line x1="95" y1="0" x2="95" y2="50" stroke="#3b82f6" stroke-width="2" stroke-dasharray="5,5"/>
+                                    <!-- Right branch: dashed grey line down -->
+                                    <line x1="285" y1="0" x2="285" y2="50" stroke="#71717a" stroke-width="2" stroke-dasharray="5,5"/>
+                                    <!-- Horizontal bar -->
+                                    <line x1="95" y1="50" x2="285" y2="50" stroke="#3f3f46" stroke-width="2"/>
+                                    <!-- Stem down to Facebook -->
+                                    <line x1="190" y1="50" x2="190" y2="62" stroke="#3f3f46" stroke-width="2"/>
+                                    <polygon points="185,60 195,60 190,68" fill="#3f3f46"/>
+                                    <!-- Label: CAPI (left of left branch) -->
+                                    <text x="82" y="30" font-family="'JetBrains Mono', monospace" font-size="9" fill="#3b82f6" font-weight="700" text-anchor="end" letter-spacing="0.8">CAPI</text>
+                                    <!-- Label: Pixel (right of right branch) -->
+                                    <text x="298" y="30" font-family="'JetBrains Mono', monospace" font-size="9" fill="#71717a" font-weight="700" text-anchor="start" letter-spacing="0.8">PIXEL</text>
+                                </svg>
+                            </div>
+                        </div>
+
+                        <!-- Facebook -->
+                        <div class="dia-row">
+                            <div class="dia-node dia-node--fb animate-scale-in stagger-5">
+                                <div class="dia-node-icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                                </div>
+                                <div class="dia-node-label" style="color: #1877F2; font-weight: 800;">Facebook</div>
+                                <div class="dia-node-sub">Meta Events Manager</div>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
 
             <div class="architecture-flow">
-                <div class="layer-card layer-1">
+                <div class="layer-card layer-1 animate-slide-up">
                     <div class="layer-number">Layer 01</div>
                     <h3>Browser-Side Tracking via GTM Web Container</h3>
                     <p>The GTM Web Container sits on the storefront and captures user interactions in real time. Each tag is configured with precise trigger conditions, data layer variables, and event parameters mapped to Meta's standard event schema.</p>
@@ -1225,61 +2245,61 @@
                     </div>
                 </div>
 
-                <div class="layer-card layer-2">
+                <div class="layer-card layer-2 animate-slide-up">
                     <div class="layer-number">Layer 02</div>
                     <h3>Server-Side Tracking via GTM Server Container + Meta CAPI</h3>
                     <p>This is where the architecture becomes enterprise-grade. A dedicated GTM Server-Side Container is deployed on a cloud environment, acting as a secure, first-party intermediary.</p>
 
                     <div class="flow-steps">
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-1">
                             <div class="flow-step-num">1</div>
                             <p>A user completes an action on ZenithCart <strong>(e.g., a Purchase)</strong></p>
                         </div>
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-2">
                             <div class="flow-step-num">2</div>
                             <p>The GTM Web Container fires the event <strong>and simultaneously sends the event payload to the Server Container</strong> via a first-party endpoint</p>
                         </div>
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-3">
                             <div class="flow-step-num">3</div>
                             <p>The Server Container receives raw event data — enriched with <strong>hashed email, hashed phone, IP address, user agent, fbc, fbp cookies</strong></p>
                         </div>
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-4">
                             <div class="flow-step-num">4</div>
                             <p>The Server Container <strong>sends data directly to Meta via the Conversion API — server-to-server.</strong> No browser involved. No JavaScript to block. No cookie to truncate.</p>
                         </div>
                     </div>
 
                     <div class="benefit-grid">
-                        <div class="benefit-pill">
+                        <div class="benefit-pill animate-scale-in stagger-1">
                             <h4>🛡️ Bypass Ad Blockers</h4>
                             <p>The CAPI call is a server-to-server HTTPS request. Invisible to browser extensions, ITP, and ATT. Cannot be blocked.</p>
                         </div>
-                        <div class="benefit-pill">
+                        <div class="benefit-pill animate-scale-in stagger-2">
                             <h4>📱 Survive iOS 14+ Opt-Outs</h4>
                             <p>Even when users opt out at device level, server-side events enriched with hashed first-party data still reach Meta.</p>
                         </div>
-                        <div class="benefit-pill">
+                        <div class="benefit-pill animate-scale-in stagger-3">
                             <h4>🔒 First-Party Data Ownership</h4>
                             <p>Cookies are classified as first-party by all major browsers. Extends cookie lifetimes from 7 days back to full duration.</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="layer-card layer-3">
+                <div class="layer-card layer-3 animate-slide-up">
                     <div class="layer-number">Layer 03</div>
                     <h3>Intelligent Event Deduplication</h3>
                     <p>Sending the same event from both browser pixel AND server creates a dangerous risk: double-counting. Inflated conversions corrupt optimization signals in the opposite direction.</p>
 
                     <div class="flow-steps" style="margin-top: 24px;">
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-1">
                             <div class="flow-step-num" style="background: var(--gradient-4);">①</div>
                             <p>A unique <strong style="color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace;">event_id</strong> is dynamically generated using a <strong>Custom Variable Template</strong> in GTM at the exact moment of user interaction</p>
                         </div>
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-2">
                             <div class="flow-step-num" style="background: var(--gradient-4);">②</div>
                             <p>This identical <strong style="color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace;">event_id</strong> is attached to both the browser pixel tag and the Server Container payload simultaneously</p>
                         </div>
-                        <div class="flow-step">
+                        <div class="flow-step animate-slide-left stagger-3">
                             <div class="flow-step-num" style="background: var(--gradient-4);">③</div>
                             <p>Meta recognizes the matching <strong style="color: var(--accent-cyan); font-family: 'JetBrains Mono', monospace;">event_id</strong> and <strong>counts the conversion exactly once</strong> — while benefiting from the richer server-side data</p>
                         </div>
@@ -1295,13 +2315,13 @@
 
     <div class="section-wrapper section-darker">
         <section class="evidence-section section">
-            <div class="section-label">Visual Evidence</div>
-            <h2 class="section-title">Every Claim.<br><span style="color: var(--accent-green);">Verified.</span></h2>
-            <p class="section-description">
+            <div class="section-label animate-slide-up">Visual Evidence</div>
+            <h2 class="section-title animate-slide-up">Every Claim.<br><span style="color: var(--accent-green);">Verified.</span></h2>
+            <p class="section-description animate-slide-up">
                 Every claim made above is substantiated with documented, verifiable evidence. Below is each screenshot demonstrating a specific layer of the architecture in live operation.
             </p>
 
-            <div class="evidence-card">
+            <div class="evidence-card animate-slide-up">
                 <div class="evidence-mockup">
                     <img src="screenshot-1.png" alt="GTM Web Container Setup">
                 </div>
@@ -1312,19 +2332,19 @@
                         The complete tag architecture inside the Google Tag Manager Web Container — showing all Meta Pixel event tags properly configured with their corresponding triggers and data layer variable mappings.
                     </p>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>Every critical e-commerce funnel event is tracked</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>Tags structured per Meta's recommended event schema</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>Precise trigger conditions — no misfires or redundant tags</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>Clean, organized, and scalable data layer integration</p>
                         </div>
@@ -1332,7 +2352,7 @@
                 </div>
             </div>
 
-            <div class="evidence-card">
+            <div class="evidence-card animate-slide-up">
                 <div class="evidence-mockup">
                     <img src="screenshot-2.png" alt="GTM Debug View">
                 </div>
@@ -1343,19 +2363,19 @@
                         The GTM Preview & Debug console's 'Summary' view, highlighted to demonstrate that every critical tag (both Meta Pixel and GA4) successfully fired across the entire user journey — from initial page views to the final purchase.
                     </p>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>All e-commerce funnel tags (AddToCart, InitiateCheckout, Purchase) fired successfully</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>Dual-tracking validation: Meta Pixel and GA4 tags fired in perfect sync</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>No tag conflicts or silent failures during the complete checkout flow</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>Implementation is live, functional, and validated in real time</p>
                         </div>
@@ -1363,7 +2383,7 @@
                 </div>
             </div>
 
-            <div class="evidence-card">
+            <div class="evidence-card animate-slide-up">
                 <div class="evidence-mockup">
                     <img src="screenshot-3.png" alt="Server Container Reception">
                 </div>
@@ -1374,19 +2394,19 @@
                         The GTM Server-Side Container logs showing incoming event requests from the Web Container. Each request successfully captures the core event payload, including crucial tracking parameters like client_id and ip_override.
                     </p>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>Web-to-Server pipeline operational — data flowing without loss</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>Core attribution parameters captured for accurate tracking</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>First-party data infrastructure successfully established</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>Server container deployed, accessible, processing at speed</p>
                         </div>
@@ -1394,7 +2414,7 @@
                 </div>
             </div>
 
-            <div class="evidence-card">
+            <div class="evidence-card animate-slide-up">
                 <div class="evidence-mockup">
                      <img src="screenshot-4.png" alt="Server Dispatch to Meta">
                 </div>
@@ -1405,19 +2425,19 @@
                         Server-side tag execution logs confirming the Meta CAPI tag has successfully sent event data to Facebook's Graph API endpoint. HTTP 200 response codes confirm successful delivery.
                     </p>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>Final mile complete — data reaches Meta, not just the server</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>Server-to-server communication authenticated and stable</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>CAPI access token and dataset ID correctly configured</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>This makes the architecture iOS-proof and ad-blocker-proof</p>
                         </div>
@@ -1425,7 +2445,7 @@
                 </div>
             </div>
 
-            <div class="evidence-card" style="border: 1px solid rgba(59, 130, 246, 0.3);">
+            <div class="evidence-card animate-slide-up" style="border: 1px solid rgba(59, 130, 246, 0.3);">
                 <div class="evidence-mockup" style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));">
                      <img src="screenshot-5.png" alt="Meta Test Events Deduplication">
                 </div>
@@ -1439,19 +2459,19 @@
                         ★ This screenshot is the single most important proof point in this entire project. It is the definitive evidence that the architecture delivers what it promises.
                     </div>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>Dual-tracking system working exactly as designed</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>Browser pixel and CAPI both active and delivering data</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>Deduplication functioning — no double-counting</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>Richest possible signal: browser + server fused into one event</p>
                         </div>
@@ -1459,7 +2479,7 @@
                 </div>
             </div>
 
-            <div class="evidence-card">
+            <div class="evidence-card animate-slide-up">
                 <div class="evidence-mockup">
                      <img src="screenshot-6.png" alt="Event Match Quality">
                 </div>
@@ -1470,19 +2490,19 @@
                         The Meta Events Manager showing EMQ scores in the "Great" range (8.0–10.0 out of 10) — the metric that separates amateur implementations from professional-grade tracking architecture.
                     </p>
                     <div class="proves-list">
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-1">
                             <span class="proves-check">✓</span>
                             <p>Meta can confidently match events back to real users</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-2">
                             <span class="proves-check">✓</span>
                             <p>User data parameters are rich, accurate, and properly formatted</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-3">
                             <span class="proves-check">✓</span>
                             <p>High EMQ = better optimization, stronger audiences, accurate attribution</p>
                         </div>
-                        <div class="proves-item">
+                        <div class="proves-item animate-slide-left stagger-4">
                             <span class="proves-check">✓</span>
                             <p>Single strongest predictor of CAPI-driven performance improvement</p>
                         </div>
@@ -1494,35 +2514,35 @@
 
     <div class="section-wrapper watson-section">
         <section class="section">
-            <div class="section-label">Business Impact</div>
-            <h2 class="section-title">What This Architecture<br><span style="color: var(--accent-green);">Delivers to Brands</span></h2>
+            <div class="section-label animate-slide-up">Business Impact</div>
+            <h2 class="section-title animate-slide-up">What This Architecture<br><span style="color: var(--accent-green);">Delivers to Brands</span></h2>
 
-            <div class="watson-highlight">
+            <div class="watson-highlight animate-slide-up">
                 <p>
                     Consider a major Malaysian retailer operating a large-scale e-commerce ecosystem with heavy Meta ad spend, a mobile-first customer base, and growing iOS adoption. Without a CAPI implementation, that brand is likely <strong>losing 20–40% of conversion data</strong> from iOS users and ad-blocker-equipped browsers every single day. This is not speculation — this is the well-documented, industry-wide consequence of browser-only tracking in a post-iOS 14 world.
                 </p>
             </div>
 
             <div class="watson-stats">
-                <div class="watson-stat">
+                <div class="watson-stat animate-scale-in stagger-1">
                     <div class="watson-stat-value">20-40%</div>
                     <div class="watson-stat-label">Conversion data lost daily</div>
                 </div>
-                <div class="watson-stat">
+                <div class="watson-stat animate-scale-in stagger-2">
                     <div class="watson-stat-value">↑ CPA</div>
                     <div class="watson-stat-label">Overpaying for every customer</div>
                 </div>
-                <div class="watson-stat">
+                <div class="watson-stat animate-scale-in stagger-3">
                     <div class="watson-stat-value">↓ ROAS</div>
                     <div class="watson-stat-label">Profitable campaigns look marginal</div>
                 </div>
-                <div class="watson-stat">
+                <div class="watson-stat animate-scale-in stagger-4">
                     <div class="watson-stat-value">30-40%</div>
                     <div class="watson-stat-label">Audience data compromised</div>
                 </div>
             </div>
 
-            <table class="comparison-table">
+            <table class="comparison-table animate-slide-up">
                 <thead>
                     <tr>
                         <th>Metric</th>
@@ -1579,7 +2599,7 @@
                 </tbody>
             </table>
 
-            <div class="callout-box">
+            <div class="callout-box animate-slide-up">
                 <h3>The Bottom Line</h3>
                 <p>
                     This is not about installing a tag. Any freelancer can drop a pixel on a page. This is about building a <span class="highlight">tracking infrastructure</span> — a system that ensures every conversion, every signal, every data point reaches Meta's optimization engine with maximum fidelity, regardless of what browser, device, operating system, or privacy setting your customer uses.
@@ -1593,18 +2613,18 @@
 
     <div class="section-wrapper">
         <section class="cta-section section">
-            <div class="section-label" style="margin-bottom: 30px;">Let's Talk</div>
+            <div class="section-label animate-slide-up" style="margin-bottom: 30px;">Let's Talk</div>
 
-            <h2>
+            <h2 class="animate-slide-up">
                 Ready to Stop<br>
                 <span class="gradient-text">Bleeding Data?</span>
             </h2>
 
-            <p class="section-description">
+            <p class="section-description animate-slide-up">
                 If you are an e-commerce brand, performance marketing team, or agency managing significant Meta ad spend — and you suspect your tracking is leaving money on the table — I would welcome a conversation.
             </p>
 
-            <div class="cta-services">
+            <div class="cta-services animate-slide-up">
                 <span class="cta-service-tag">Meta CAPI Implementation</span>
                 <span class="cta-service-tag">Server-Side GTM</span>
                 <span class="cta-service-tag">GA4 Advanced E-Commerce</span>
@@ -1613,31 +2633,193 @@
                 <span class="cta-service-tag">Conversion Accuracy Auditing</span>
             </div>
 
-            <div class="cta-contact">
+            <div class="cta-contact animate-slide-up">
                 <div class="cta-name">MD. SHAHJALAL KABIR</div>
                 <div class="cta-role">Founder & Lead Tracking Architect — Tracking Mastery</div>
 
                 <div class="cta-links">
-                    <div class="cta-link-item">
+                    <div class="cta-link-item cta-link-item--static">
                         <span class="cta-link-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
                         </span>
                         shahjalal.cse13@gmail.com
                     </div>
-                    <div class="cta-link-item">
+                                    <a href="https://wa.me/8801305119477?text=Hi%20Shahjalal%2C%20I%20reviewed%20your%20ZenithCart%20Tracking%20Architecture%20POC%20and%20I%E2%80%99m%20interested%20in%20discussing%20an%20implementation%20for%20our%20brand." class="cta-link-item" target="_blank" rel="noopener noreferrer">
                         <span class="cta-link-icon">
                             <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51a12.8 12.8 0 0 0-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413Z"/>
                             </svg>
                         </span>
                         +8801305119477
-                    </div>
+                    </a>
                 </div>
             </div>
         </section>
     </div>
 
 </div>
+
+<!-- IntersectionObserver Script for Scroll Animations -->
+<script>
+(function() {
+    'use strict';
+    
+    // Configuration
+    const observerConfig = {
+        root: null,
+        rootMargin: '0px 0px -50px 0px',
+        threshold: 0.1
+    };
+
+    // Elements to animate
+    const animatedSelectors = [
+        '.animate-fade-in',
+        '.animate-slide-up',
+        '.animate-slide-left',
+        '.animate-slide-right',
+        '.animate-scale-in'
+    ];
+
+    // Create the observer
+    const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                // Add visible class to trigger animation
+                entry.target.classList.add('visible');
+                
+                // Optional: Stop observing after animation
+                // observer.unobserve(entry.target);
+            }
+        });
+    }, observerConfig);
+
+    // Wait for DOM to be ready
+    function init() {
+        // Select all animated elements
+        const animatedElements = document.querySelectorAll(animatedSelectors.join(', '));
+        
+        // Observe each element
+        animatedElements.forEach(element => {
+            observer.observe(element);
+        });
+
+        // Add smooth scroll behavior
+        document.documentElement.style.scrollBehavior = 'smooth';
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Optional: Add parallax effect to hero background
+    let ticking = false;
+    
+    function updateParallax() {
+        const scrolled = window.pageYOffset;
+        const hero = document.querySelector('.hero');
+        
+        if (hero && scrolled < window.innerHeight) {
+            const rate = scrolled * 0.3;
+            hero.style.backgroundPosition = `center ${rate}px`;
+        }
+        
+        ticking = false;
+    }
+
+    window.addEventListener('scroll', function() {
+        if (!ticking) {
+            window.requestAnimationFrame(updateParallax);
+            ticking = true;
+        }
+    }, { passive: true });
+
+    // Add hover ripple effect for cards
+    document.querySelectorAll('.problem-card, .impact-card, .layer-card, .benefit-pill, .watson-stat, .evidence-card').forEach(card => {
+        card.addEventListener('mouseenter', function(e) {
+            const rect = this.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            
+            this.style.setProperty('--mouse-x', `${x}px`);
+            this.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // Stagger animation for grid items when they come into view
+    const staggerObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                const children = entry.target.querySelectorAll('[class*="stagger-"]');
+                children.forEach((child, index) => {
+                    setTimeout(() => {
+                        child.classList.add('visible');
+                    }, index * 100);
+                });
+            }
+        });
+    }, { threshold: 0.2 });
+
+    // Observe grid containers
+    document.querySelectorAll('.problem-grid, .impact-grid, .benefit-grid, .watson-stats, .proves-list, .flow-steps').forEach(grid => {
+        staggerObserver.observe(grid);
+    });
+
+    // Counter animation for stats
+    function animateCounter(element, target, duration = 1500) {
+        const start = 0;
+        const increment = target / (duration / 16);
+        let current = start;
+        
+        const timer = setInterval(() => {
+            current += increment;
+            if (current >= target) {
+                element.textContent = target;
+                clearInterval(timer);
+            } else {
+                element.textContent = Math.floor(current);
+            }
+        }, 16);
+    }
+
+    // Observe stat values for counter animation
+    const statObserver = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting && !entry.target.dataset.animated) {
+                entry.target.dataset.animated = 'true';
+                const text = entry.target.textContent;
+                const match = text.match(/\d+/);
+                if (match) {
+                    const target = parseInt(match[0]);
+                    const prefix = text.split(match[0])[0];
+                    const suffix = text.split(match[0])[1];
+                    
+                    let current = 0;
+                    const duration = 1500;
+                    const increment = target / (duration / 16);
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            entry.target.textContent = prefix + target + suffix;
+                            clearInterval(timer);
+                        } else {
+                            entry.target.textContent = prefix + Math.floor(current) + suffix;
+                        }
+                    }, 16);
+                }
+            }
+        });
+    }, { threshold: 0.5 });
+
+    document.querySelectorAll('.watson-stat-value').forEach(stat => {
+        statObserver.observe(stat);
+    });
+
+})();
+</script>
 
 </body>
 </html>
